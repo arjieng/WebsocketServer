@@ -1,0 +1,22 @@
+defaults: &defaults
+  adapter: postgresql
+  encoding: utf8
+  reconnect: false
+  pool: 10
+  username: arjieng
+
+development:
+  <<: *defaults
+  database: babaapp
+
+test:
+  <<: *defaults
+  database: babaapp_testing
+
+staging:
+  <<: *defaults
+  database: babaapp_staging
+
+production:
+  <<: *defaults
+  database: idle
