@@ -22,5 +22,32 @@ module WebsocketApp
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    if defined?(Rails::Server)
+        config.after_initialize do 
+            require 'em-websocket'
+            
+            EM.run{
+                @channel = EM::Channel.new
+                EM::WebSocket.run(:host => '0.0.0.0', :port => ENV['PORT'] || 3000) do |ws|
+                    ws.onopen {
+                        sid = @channel.subscribe { |msg| ws.send msg }
+                        timer = EM.add_periodic_timer(50){
+                            p [sid, ws.ping('hello')]
+                        }
+
+                        ws.onmessage { |msg|
+                            @channel.push "{\"users\": { \"id\": #{sid}, \"msg\": \"#{msg}\" }}"
+                        }
+
+                        ws.onclose{
+                            @channel.unsubscribe(sid)
+                            EM.cancel_timer(timer)
+                        }
+                    }
+                end
+            }
+        end
+    end
   end
 end
