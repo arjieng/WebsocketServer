@@ -32,6 +32,7 @@ module WebsocketApp
                 EM::WebSocket.run(:host => '0.0.0.0', :port => ENV['PORT'] || 8080) do |ws|
                     ws.onopen {
                         sid = @channel.subscribe { |msg| ws.send msg }
+                        puts sid
                         timer = EM.add_periodic_timer(30){
                             p [sid, ws.ping('hello')]
                         }
