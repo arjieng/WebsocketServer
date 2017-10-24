@@ -38,7 +38,13 @@ module WebsocketApp
 
                         ws.onmessage { |msg|
                             parsed = JSON.parse(msg)
-                            puts parsed.to_s
+                            parsed.each { |e| puts e  }
+                            puts parsed[0]
+                            puts parsed[1]
+                            puts parsed[:latitude]
+                            puts parsed[:longitude]
+                            puts parsed["latitude"]
+                            puts parsed["longitude"]
                             @channel.push "{\"id\": #{sid}, \"latitude\": \"#{parsed[0].to_s}\", \"longitude\": \"#{parsed[1].to_s}\" }"
                         }
 
