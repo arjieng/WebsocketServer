@@ -38,7 +38,7 @@ module WebsocketApp
 
                         ws.onmessage { |msg|
                             parsed = JSON.parse(msg)
-                            @channel.push "{\"id\": #{sid}, \"latitude\": \"#{parsed["latitude"].to_s}\", \"longitude\": \"#{parsed["longitude"].to_s}\" }"
+                            @channel.push "{\"id\": #{sid}, \"latitude\": \"#{parsed["latitude"]}\", \"longitude\": \"#{parsed["longitude"]}\" }"
                         }
 
                         ws.onclose{
