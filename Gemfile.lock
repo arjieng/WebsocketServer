@@ -165,6 +165,7 @@ DEPENDENCIES
   em-websocket
   jbuilder (~> 2.0)
   jquery-rails
+  json
   pg (~> 0.18.4)
   rails (= 4.2.7)
   sass-rails (~> 5.0)

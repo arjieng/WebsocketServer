@@ -43,6 +43,6 @@ group :development do
   gem 'spring'
 end
 
-
+gem 'json'
 gem 'pg', '~> 0.18.4'
 gem 'em-websocket'

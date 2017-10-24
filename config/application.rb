@@ -37,7 +37,8 @@ module WebsocketApp
                         }
 
                         ws.onmessage { |msg|
-                            @channel.push "{\"users\": { \"id\": #{sid}, \"msg\": \"#{msg}\" }}"
+                            parsed = JSON.parse(msg)
+                            @channel.push "{\"id\": #{sid}, \"latitude\": \"#{parsed[:latitude]}\", \"longitude\": \"#{parsed[:longitude]}\" }"
                         }
 
                         ws.onclose{
