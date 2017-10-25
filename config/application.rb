@@ -39,13 +39,17 @@ module WebsocketApp
 
                         ws.onmessage { |msg|
                             parsed = JSON.parse(msg)
-                            if !parsed["new_connection"].nil?
+                            if parsed["new_connection"].present?
                                 @channel.push "{ \"new_connection\": { \"sid\": #{sid}, \"aid\": #{parsed["new_connection"]["aid"]} } }"
                             end
-                            # @channel.push "{\"id\": #{sid}, \"latitude\": \"#{parsed["latitude"]}\", \"longitude\": \"#{parsed["longitude"]}\" }"
+
+                            if parsed["new_position"].present?
+                                @channel.push "{ \"new_position\": { \"id\": #{parsed["new_position"]["aid"]} }, \"latitude\": #{parsed["new_position"]["latitude"]}, \"longitude\": #{parsed["new_position"]["longitude"]} }"
+                            end
                         }
 
                         ws.onclose{
+                            @channel.push "{ \"remove_connection\": \"#{sid}\" }"
                             @channel.unsubscribe(sid)
                             EM.cancel_timer(timer)
                         }
