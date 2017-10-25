@@ -44,7 +44,7 @@ module WebsocketApp
                             end
 
                             if parsed["new_position"].present?
-                                @channel.push "{ \"new_position\": { \"id\": #{parsed["new_position"]["aid"]} }, \"latitude\": #{parsed["new_position"]["latitude"]}, \"longitude\": #{parsed["new_position"]["longitude"]} }"
+                                @channel.push "{ \"new_position\": { \"id\": #{parsed["new_position"]["aid"]}, \"latitude\": #{parsed["new_position"]["latitude"]}, \"longitude\": #{parsed["new_position"]["longitude"]} } }"
                             end
                         }
 
