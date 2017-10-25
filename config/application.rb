@@ -32,7 +32,6 @@ module WebsocketApp
                 EM::WebSocket.run(:host => '0.0.0.0', :port => ENV['PORT'] || 8080) do |ws|
                     ws.onopen { |hs|
                         sid = @channel.subscribe { |msg| ws.send msg }
-                        ws.ping(body = sid.to_s)
                         timer = EM.add_periodic_timer(30){
                             p [sid, ws.ping('hello')]
                         }
@@ -40,7 +39,10 @@ module WebsocketApp
 
                         ws.onmessage { |msg|
                             parsed = JSON.parse(msg)
-                            @channel.push "{\"id\": #{sid}, \"latitude\": \"#{parsed["latitude"]}\", \"longitude\": \"#{parsed["longitude"]}\" }"
+                            if !parsed["new_connection"].nil?
+                                @channel.push "{ \"new_connection\": { \"sid\": #{sid}, \"aid\": #{parsed["new_connection"]["aid"]} } }"
+                            end
+                            # @channel.push "{\"id\": #{sid}, \"latitude\": \"#{parsed["latitude"]}\", \"longitude\": \"#{parsed["longitude"]}\" }"
                         }
 
                         ws.onclose{
