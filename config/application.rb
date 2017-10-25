@@ -61,7 +61,7 @@ module WebsocketApp
 
                         ws.onclose{
                             puts "disconnected"
-                            @disconnected.drop sid
+                            @disconnected.delete sid
                             @disconnected.push sid
                             @channel.push "{ \"remove_connection\": \"#{sid}\" }"
                             @channel.unsubscribe(sid)
