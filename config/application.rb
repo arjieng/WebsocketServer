@@ -30,11 +30,13 @@ module WebsocketApp
             EM.run{
                 @channel = EM::Channel.new
                 EM::WebSocket.run(:host => '0.0.0.0', :port => ENV['PORT'] || 8080) do |ws|
-                    ws.onopen {
+                    ws.onopen { |hs|
                         sid = @channel.subscribe { |msg| ws.send msg }
+                        ws.ping(body = sid.to_s)
                         timer = EM.add_periodic_timer(30){
                             p [sid, ws.ping('hello')]
                         }
+
 
                         ws.onmessage { |msg|
                             parsed = JSON.parse(msg)
