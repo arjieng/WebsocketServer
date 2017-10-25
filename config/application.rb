@@ -39,12 +39,8 @@ module WebsocketApp
 
                         ws.onmessage { |msg|
                             parsed = JSON.parse(msg)
-                            if parsed["new_connection"].present?
-                                @channel.push "{ \"new_connection\": { \"sid\": #{sid}, \"aid\": #{parsed["new_connection"]["aid"]} } }"
-                            end
-
                             if parsed["new_position"].present?
-                                @channel.push "{ \"new_position\": { \"id\": #{parsed["new_position"]["aid"]}, \"latitude\": #{parsed["new_position"]["latitude"]}, \"longitude\": #{parsed["new_position"]["longitude"]} } }"
+                                @channel.push "{ \"new_position\": { \"sid\": #{sid}, \"aid\": #{parsed["new_position"]["aid"]}, \"latitude\": #{parsed["new_position"]["latitude"]}, \"longitude\": #{parsed["new_position"]["longitude"]} } }"
                             end
                         }
 
