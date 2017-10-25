@@ -33,6 +33,7 @@ module WebsocketApp
                 @disconnected = []
                 EM::WebSocket.run(:host => '0.0.0.0', :port => ENV['PORT'] || 8080) do |ws|
                     ws.onopen {
+                        puts "connected"
                         myId = nil
                         sid = @channel.subscribe { |msg| ws.send msg }
                         @connected.push sid
@@ -59,7 +60,9 @@ module WebsocketApp
                         }
 
                         ws.onclose{
+                            puts "disconnected"
                             @disconnected.drop sid
+                            @disconnected.push sid
                             @channel.push "{ \"remove_connection\": \"#{sid}\" }"
                             @channel.unsubscribe(sid)
                             EM.cancel_timer(timer)
