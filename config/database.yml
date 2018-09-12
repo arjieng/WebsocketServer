@@ -1,22 +1,28 @@
-defaults: &defaults
+default: &default
   adapter: postgresql
-  encoding: utf8
-  reconnect: false
-  pool: 10
-  username: arjieng
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
-  <<: *defaults
-  database: babaapp
+  <<: *default
+  database: gospeltribes
+  host: localhost
 
 test:
-  <<: *defaults
-  database: babaapp_testing
+  <<: *default
+  database: boastload-ws_test
+  username: postgres
+  password: password
+  host: localhost
 
 staging:
-  <<: *defaults
-  database: babaapp_staging
+  <<: *default
+  database: boastload-ws_staging
+  url: <%= ENV["DATABASE_URL"] %>
+
 
 production:
-  <<: *defaults
-  database: idle
+  <<: *default
+  # database: boastload-ws_production
+  database: gospeltribes
+  url: <%= ENV["DATABASE_URL"] %>

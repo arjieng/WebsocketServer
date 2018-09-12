@@ -1,56 +1,53 @@
 Rails.application.routes.draw do
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
+  # mount_devise_token_auth_for 'User', at: 'auth'
 
-  # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  scope :api do
+    scope :v1, path: '' do
+      mount_devise_token_auth_for 'User', at: 'auth', controllers: {
+        token_validations:  'api/v1/sessions',
+        sessions: 'api/v1/sessions',
+        registrations: 'api/v1/registrations'
+      }
+    end
+  end
 
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
+  namespace :api do
+  	namespace :v1, path: '' do
+  		resources :group, only: [:member_list] do
+        get 'group_members' => 'groups#member_list'
+      end
+      get 'check_group' => 'groups#check_group'
+      get 'get_chatrooms' => 'groups#get_chatrooms'
 
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
+      post 'update_account' => 'users#update_account'
+      get 'user_images' => 'users#user_images'
+      post 'upload_user_avatar' => 'users#upload_user_avatar'
+      get 'get_user_info' => 'users#get_user_info'
 
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
 
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
+      post 'update_profile' => 'users#update_profile'
+      post 'create_prayer' => 'prayers#create'
+      get 'prayers' => 'prayers#index'
+      post 'update_prayer' => 'prayers#update'
+      get 'answered_prayers' => 'prayers#answered_prayers'
+      get 'unanswered_prayers' => 'prayers#unanswered_prayers'
+      get 'prayer_comments' => 'prayers#prayer_comments'
+      post 'add_prayer_comment' => 'prayers#add_prayer_comment'
+      get 'hide_prayer' => 'prayers#hide_prayer'
+      get 'get_all_prayers'=>'prayers#get_all_prayers'
 
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
+      
+      post 'add_event' => 'events#create'
+      get 'all_events' => 'events#index'
+      post 'update_event' => 'events#update'
+      get 'add_attendee' => 'events#add_attendee'
+      get 'attendees' => 'events#get_attendees'
+      get 'remove_attendee' => 'events#remove_attendee'
+      # resources :prayers, only:
+  	end
+  end
 
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
 
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
