@@ -7,7 +7,7 @@ require_relative '../../config/environment.rb'
 class GospelTribesAuthentication
 	def initialize
 		@logger = Logger.new STDOUT	
-		@faye_server = Faye::Client.new("tcp://192.168.2.123:8080/faye")
+		@faye_server = Faye::Client.new("https://gttttt.herokuapp.com:9292/faye")
 	end
 	
 	def incoming(message, callback)
